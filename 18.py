@@ -21,8 +21,6 @@ triangle = triangle.split('\n')
 triangle = [list(map(int, line.split(' '))) for line in triangle]
 total = sum([len(row) for row in triangle])
 
-# print(triangle,total)
-
 graph={}
 i=0
 for row in triangle:
@@ -33,7 +31,6 @@ for row in triangle:
         if i + len(row) + 1 < total:
             graph[i]["right"] = i + len(row) + 1
         i+=1
-# print(graph)
 
 adj = []
 for i in range(total):
@@ -42,34 +39,24 @@ for i in range(total):
         adj[i].append((graph[i]["left"],graph[graph[i]["left"]]["val"]))
     if graph[i].get("right"):
         adj[i].append((graph[i]["right"],graph[graph[i]["right"]]["val"]))
-# print(adj)
 
 def dijkstra(adj,src):
     V = len(adj)
     pq = []
     dist = [0] * V
-    # Distance from source to itself is 0
     dist[src] = 75
     heapq.heappush(pq, (75, src))
-
-    # Process the queue until all reachable vertices are finalized
     while pq:
         d, u = heapq.heappop(pq)
-
-        # If this distance not the latest longest one, skip it
         if d < dist[u]:
             continue
 
-        # Explore all neighbors of the current vertex
         for v, w in adj[u]:
             if v >= len(dist):
                 continue
-            # If we found a longer path to v through u, update it
             if dist[u] + w > dist[v]:
                 dist[v] = dist[u] + w
                 heapq.heappush(pq, (dist[v], v))
-
-    # Return the final shortest distances from the source
     return dist
 paths = dijkstra(adj,0)
 print(max(paths))
